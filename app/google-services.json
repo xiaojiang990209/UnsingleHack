@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1055221345332",
+    "firebase_url": "https://singlehack-5eeb0.firebaseio.com",
+    "project_id": "singlehack-5eeb0",
+    "storage_bucket": "singlehack-5eeb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055221345332:android:5b58849cb32d7a64",
+        "android_client_info": {
+          "package_name": "com.z224jian.singlehack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055221345332-jh5d55gkfk27lfc1s8325ss9gt91d0p7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPSVerws1KzPyOwB0wt6vwPj_rp89ayH8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

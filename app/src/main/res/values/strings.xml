@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">SingleHack</string>
+    <string-array name="available_locations">
+        <item>DC</item>
+        <item>MC</item>
+        <item>SLC</item>
+        <item>DP</item>
+        <!-- other options add here .. -->
+    </string-array>
+</resources>
