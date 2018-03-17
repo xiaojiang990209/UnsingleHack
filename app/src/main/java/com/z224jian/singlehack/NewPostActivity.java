@@ -160,13 +160,13 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
         String day = String.valueOf(now.get(Calendar.DAY_OF_MONTH));
         String fromInString = month + "-" + day + "-" + year + " " + timeFrom;
         String toInString = month + "-" + day + "-" + year + " " + timeFrom;
-        Post post = new Post("testid", location, course, gender, fromInString, toInString);
+        Post post = new Post(currUser.getUid(), location, course, gender, fromInString, toInString);
         // Upload to post
         Map<String, String> postMap = post.toMap();
         mDatabase.child("Post").child(pid).setValue(postMap);
-        mDatabase.child("Location").child(post.getLocation()).child("test").child(pid).setValue(postMap);
-        mDatabase.child("Course").child(post.getCourseCode()).child("test").child(pid).setValue(postMap);
-        mDatabase.child("Gender").child(post.getGender()).child("test").child(pid).setValue(postMap);
+        mDatabase.child("Location").child(post.getLocation()).child("pid").setValue(pid);
+        mDatabase.child("Course").child(post.getCourseCode()).child("pid").setValue(pid);
+        mDatabase.child("Gender").child(post.getGender()).child("pid").setValue(pid);
     }
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
