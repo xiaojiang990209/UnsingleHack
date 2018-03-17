@@ -12,11 +12,9 @@
         <item>SCH</item>
         <!-- other options add here .. -->
     </string-array>
-<<<<<<< HEAD
     <string name="facebook_app_id">1232776790185935</string>
     <string name="fb_login_protocol_scheme">fb1232776790185935</string>
     <string name="main_signIn">Matchable</string>
-=======
     <string-array name="available_courses">
         <item>Math 135</item>
         <item>Math 136</item>
@@ -25,13 +23,9 @@
         <item>CS 135</item>
         <item>CS 136</item>
     </string-array>
-<<<<<<< HEAD
     <string-array name="available_genders">
         <item>Male</item>
         <item>Female</item>
         <item>No Preference</item>
     </string-array>
-=======
->>>>>>> cb1f094c82f0152dedcd29d5f574672a4d913de7
->>>>>>> 709534ac2e04c97e79eafbd436649495812ef0c4
 </resources>
