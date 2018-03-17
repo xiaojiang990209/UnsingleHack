@@ -7,14 +7,6 @@
     tools:context="com.z224jian.singlehack.MainActivity">
 
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:adjustViewBounds="false"
-        android:src="@color/highlighted_text_material_light" />
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_new_post"
         android:layout_width="wrap_content"
@@ -27,13 +19,7 @@
         app:backgroundTint="@color/colorAccent"
         app:rippleColor="@color/colorAccent" />
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/TV_email"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal" />
+
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
@@ -66,25 +52,5 @@
         android:layout_above="@+id/tabs"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="21dp" />
-
-    <TextView
-        android:id="@+id/TV_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="id"
-        android:textStyle="bold"
-        android:textSize="30dp"/>
-
-    <TextView
-        android:id="@+id/main_signIn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="69dp"
-        android:clickable="false"
-        android:text="@string/main_signIn"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        android:visibility="visible" />
 
 </RelativeLayout>
