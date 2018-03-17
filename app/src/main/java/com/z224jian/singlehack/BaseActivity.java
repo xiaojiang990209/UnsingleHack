@@ -9,7 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
  * Created by z224jian on 16/03/18.
  */
 
-public class BaseActivity extends BaseActivity {
+public class BaseActivity extends AppCompatActivity{
     private ProgressDialog mProgressDialog;
 
     public void showProgressDialog() {

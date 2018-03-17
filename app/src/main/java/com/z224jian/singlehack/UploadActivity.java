@@ -23,7 +23,7 @@ import java.util.Map;
 * Created by lichi on 2018/3/16.
 */
 
-public class UploadActivity extends AppCompatActivity{
+public class UploadActivity extends BaseActivity {
    private DatabaseReference mDatabase;
    private FirebaseUser currUser;
    @Override
