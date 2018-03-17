@@ -1,74 +1,55 @@
-package com.z224jian.singlehack.models;
+package com.z224jian.singlehack.Model;
 
+import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Created by z224jian on 17/03/18.
+ */
+
 public class Post {
-    private String location;
-    private String userID;
-    private String courseCode;
-    private TimePeriod timePeriod;
-    private String gender;
 
-    public Post(String userID, String location, String courseCode, String gender, String start,
-                String end){
-        this.courseCode = courseCode;
+    private static final String TAG = "Post";
+
+    public String userId = "";
+    public String location = "";
+    public String courseCode = "";
+    public String timeFrom = "";
+    public String timeTo = "";
+    public String date = "";
+    public String genderPreference = "";
+
+    public Post() {
+        // Default constructor required for calls for DataSnapshot.getValue(User.class)
+    }
+
+    public Post(String userId, String location, String courseCode,
+                String timeFrom, String timeTo, String date, String genderPreference) {
+        this.userId = userId;
         this.location = location;
-        this.userID = userID;
-        this.timePeriod = new TimePeriod(start, end);
-        this.gender = gender;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-
-    public String getCourseCode() {
-        return courseCode;
-    }
-
-    public void setCourseCode(String courseCode) {
         this.courseCode = courseCode;
+        this.timeFrom = timeFrom;
+        this.timeTo = timeTo;
+        this.date = date;
+        this.genderPreference = genderPreference;
     }
 
-    public TimePeriod getTimePeriod() {
-        return this.timePeriod;
-    }
+    // [START post_to_map]
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("Course", courseCode);
+        result.put("Gender", genderPreference);
+        result.put("Location", location);
+        result.put("Uid", userId);
+        result.put("end", timeTo);
+        result.put("start", timeFrom);
+        result.put("date", date);
 
-    public void setTimePeriod(String start, String end) {
-        this.timePeriod.setStartFrom(start);
-        this.timePeriod.setEndAt(end);
+        return result;
     }
+    // [END post_to_map]
 
-    public Map<String, String> toMap(){
-        Map<String, String> map = new HashMap<>();
-        map.put("Location", this.location);
-        map.put("Course", this.courseCode);
-        map.put("Gender", this.gender);
-        map.put("Uid", this.userID);
-        map.put("start", this.timePeriod.getStartFrom());
-        map.put("end", this.timePeriod.getEndAt());
-        return map;
-    }
 }
