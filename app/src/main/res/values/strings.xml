@@ -5,6 +5,19 @@
         <item>MC</item>
         <item>SLC</item>
         <item>DP</item>
+        <item>HH</item>
+        <item>STC</item>
+        <item>HH</item>
+        <item>AL</item>
+        <item>SCH</item>
         <!-- other options add here .. -->
+    </string-array>
+    <string-array name="available_courses">
+        <item>Math 135</item>
+        <item>Math 136</item>
+        <item>Math 137</item>
+        <item>Math 138</item>
+        <item>CS 135</item>
+        <item>CS 136</item>
     </string-array>
 </resources>
