@@ -1,5 +1,6 @@
 package com.z224jian.singlehack;
 
+import android.app.DialogFragment;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,23 +14,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.z224jian.singlehack.models.Post;
 
 import java.lang.reflect.Array;
 import java.nio.charset.Charset;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by z224jian on 16/03/18.
  */
 
-public class NewPostActivity extends BaseActivity {
+public class NewPostActivity extends BaseActivity implements TimePickerFragment.TimePickedListener{
     private static final String TAG = "NewPostActivity";
     private static final String REQUIRED = "Required";
 
     // [START declare database_ref]
     private DatabaseReference mDatabase;
     // [END declare_database_ref]
+
+    // Current user
+    private FirebaseUser currUser;
 
     private Spinner mLocationField;
     private EditText mTimeFieldFrom;
@@ -39,7 +49,8 @@ public class NewPostActivity extends BaseActivity {
     // For now, use an EditText
     private Spinner mCourseField;
     private FloatingActionButton mSubmitButton;
-
+    // Indicate which time field is open
+    private boolean isFromField;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,12 +63,16 @@ public class NewPostActivity extends BaseActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
 
+        // Login by current user.
+        currUser = login();
+
         mLocationField = findViewById(R.id.location_field);
         mTimeFieldFrom = findViewById(R.id.time_field_from);
         mTimeFieldTo = findViewById(R.id.time_field_to);
         mCourseField = findViewById(R.id.course_field);
         mGenderField = findViewById(R.id.gender_field);
         mSubmitButton = findViewById(R.id.fab_submit_post);
+        isFromField = false;
 
         // Initialize spinner options
         ArrayAdapter<CharSequence> locations_adapter = ArrayAdapter.createFromResource(this,
@@ -80,6 +95,20 @@ public class NewPostActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 submitPost();
+            }
+        });
+        // Onclick waking up the time picker dialog
+        mTimeFieldFrom.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                isFromField = true;
+                showTimePickerDialog(view);
+            }
+        });
+        mTimeFieldTo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                showTimePickerDialog(view);
             }
         });
     }
@@ -122,11 +151,40 @@ public class NewPostActivity extends BaseActivity {
                     .show();
             return;
         }
-
-
         // Handle posting process...
-
-
+        // Get a post id
+        String pid = mDatabase.child("Post").push().getKey();
+        Calendar now = Calendar.getInstance();
+        String year = String.valueOf(now.get(Calendar.YEAR));
+        String month = String.valueOf(now.get(Calendar.MONTH) +1);
+        String day = String.valueOf(now.get(Calendar.DAY_OF_MONTH));
+        String fromInString = month + "-" + day + "-" + year + " " + timeFrom;
+        String toInString = month + "-" + day + "-" + year + " " + timeFrom;
+        Post post = new Post("testid", location, course, gender, fromInString, toInString);
+        // Upload to post
+        Map<String, String> postMap = post.toMap();
+        mDatabase.child("Post").child(pid).setValue(postMap);
+        mDatabase.child("Location").child(post.getLocation()).child("test").child(pid).setValue(postMap);
+        mDatabase.child("Course").child(post.getCourseCode()).child("test").child(pid).setValue(postMap);
+        mDatabase.child("Gender").child(post.getGender()).child("test").child(pid).setValue(postMap);
     }
-
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getFragmentManager(), "timePicker");
+    }
+    @Override
+    public void onTimePicked(String time){
+        if (isFromField) {
+            mTimeFieldFrom.setText(time);
+            isFromField = false;
+        } else {
+            mTimeFieldTo.setText(time);
+        }
+    }
+    // Demo login. Will be replaced once the auth module is ready.
+    public FirebaseUser login(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signInWithEmailAndPassword("lichiheng1998@gmail.com", "wobuzhidao");
+        return auth.getCurrentUser();
+    }
 }
