@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\yawen\UnsingleHack\SingleHack.iml" filepath="C:\Users\yawen\UnsingleHack\SingleHack.iml" />
       <module fileurl="file://$PROJECT_DIR$/UnsingleHack.iml" filepath="$PROJECT_DIR$/UnsingleHack.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

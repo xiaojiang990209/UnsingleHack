@@ -13,6 +13,7 @@
         <!-- other options add here .. -->
     </string-array>
     <string name="facebook_app_id">1232776790185935</string>
+    <string name="title_activity_main2">UserProfile</string>>
     <string name="fb_login_protocol_scheme">fb1232776790185935</string>
     <string name="main_signIn">Matchable</string>
     <string-array name="available_courses">
