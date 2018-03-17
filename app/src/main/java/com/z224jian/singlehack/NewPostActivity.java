@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
@@ -44,6 +45,7 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
     // For now, use an EditText
     private Spinner mCourseField;
     private FloatingActionButton mSubmitButton;
+    private TextView mMatchedField;
     // Indicate which time field is open
     private boolean isFromField;
     @Override
@@ -67,8 +69,10 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
         mCourseField = findViewById(R.id.course_field);
         mGenderField = findViewById(R.id.gender_field);
         mSubmitButton = findViewById(R.id.fab_submit_post);
+        mMatchedField = findViewById(R.id.matched_pid);
         isFromField = false;
 
+        mMatchedField.setText("None");
         // Initialize spinner options
         ArrayAdapter<CharSequence> locations_adapter = ArrayAdapter.createFromResource(this,
                 R.array.available_locations, android.R.layout.simple_spinner_item);
@@ -157,9 +161,8 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
         String toInString = month + "-" + day + "-" + year + " " + timeFrom;
         Post post = new Post(currUser.getUid(), location, course, gender, fromInString, toInString);
         // Searching for matched post
-        Matcher matcher = new Matcher(post, mDatabase);
-        String matched = matcher.doMatch(true, true, true);
-        Log.i("matched", matched);
+        Matcher matcher = new Matcher(post, pid, mDatabase, mMatchedField);
+        matcher.createQuerys(true, true, true);
         // Upload to post
         Map<String, String> postMap = post.toMap();
         mDatabase.child("Post").child(pid).setValue(postMap);
