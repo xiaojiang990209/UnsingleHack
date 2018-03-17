@@ -184,7 +184,7 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
     // Demo login. Will be replaced once the auth module is ready.
     public FirebaseUser login(){
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.signInWithEmailAndPassword("lichiheng1998@gmail.com", "wobuzhidao");
+        auth.signInWithEmailAndPassword("lichiheng1998@gmail.com", "1234567890");
         return auth.getCurrentUser();
     }
 }
