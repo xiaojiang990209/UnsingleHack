@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,6 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.z224jian.singlehack.Model.Post;
+
+import java.lang.reflect.Array;
+import java.nio.charset.Charset;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +40,9 @@ import java.util.Map;
  * Created by z224jian on 16/03/18.
  */
 
-public class NewPostActivity extends BaseActivity implements TimePickerFragment.TimePickedListener{
+public class NewPostActivity extends BaseActivity
+        implements TimePickerFragment.TimePickedListener,
+                   DatePickerFragment.DatePickedListener{
     private static final String TAG = "NewPostActivity";
     private static final String REQUIRED = "Required";
 
@@ -44,6 +56,7 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
     private Spinner mLocationField;
     private EditText mTimeFieldFrom;
     private EditText mTimeFieldTo;
+    private EditText mDateField;
     private Spinner mGenderField;
     //... Add course code field here.
     // For now, use an EditText
@@ -69,6 +82,7 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
         mLocationField = findViewById(R.id.location_field);
         mTimeFieldFrom = findViewById(R.id.time_field_from);
         mTimeFieldTo = findViewById(R.id.time_field_to);
+        mDateField = findViewById(R.id.date_field);
         mCourseField = findViewById(R.id.course_field);
         mGenderField = findViewById(R.id.gender_field);
         mSubmitButton = findViewById(R.id.fab_submit_post);
@@ -111,6 +125,25 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
                 showTimePickerDialog(view);
             }
         });
+        mDateField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog(view);
+            }
+        });
+    }
+
+    private void setEditingEnabled(boolean enabled) {
+        mLocationField.setEnabled(enabled);
+        mTimeFieldFrom.setEnabled(enabled);
+        mTimeFieldTo.setEnabled(enabled);
+        mCourseField.setEnabled(enabled);
+        mGenderField.setEnabled(enabled);
+        if (enabled) {
+            mSubmitButton.setVisibility(View.VISIBLE);
+        } else {
+            mSubmitButton.setVisibility(View.GONE);
+        }
     }
 
     private void submitPost() {
@@ -118,6 +151,7 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
                 "" : mLocationField.getSelectedItem().toString();
         final String timeFrom = mTimeFieldFrom.getText().toString();
         final String timeTo = mTimeFieldTo.getText().toString();
+        final String date = mDateField.getText().toString();
         final String gender = mGenderField.getSelectedItem() == null ?
                 "" : mGenderField.getSelectedItem().toString();
         final String course = mCourseField.getSelectedItem() == null ?
@@ -131,6 +165,10 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
         // Time to is required
         if (TextUtils.isEmpty(timeTo)) {
             mTimeFieldTo.setError(REQUIRED);
+            return;
+        }
+        if (TextUtils.isEmpty(date)) {
+            mDateField.setError(REQUIRED);
             return;
         }
         // User didnt select location
@@ -151,27 +189,28 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
                     .show();
             return;
         }
+
         // Handle posting process...
-        // Get a post id
-        String pid = mDatabase.child("Post").push().getKey();
-        Calendar now = Calendar.getInstance();
-        String year = String.valueOf(now.get(Calendar.YEAR));
-        String month = String.valueOf(now.get(Calendar.MONTH) +1);
-        String day = String.valueOf(now.get(Calendar.DAY_OF_MONTH));
-        String fromInString = month + "-" + day + "-" + year + " " + timeFrom;
-        String toInString = month + "-" + day + "-" + year + " " + timeFrom;
-        Post post = new Post(currUser.getUid(), location, course, gender, fromInString, toInString);
-        // Upload to post
-        Map<String, String> postMap = post.toMap();
-        mDatabase.child("Post").child(pid).setValue(postMap);
-        mDatabase.child("Location").child(post.getLocation()).child("pid").setValue(pid);
-        mDatabase.child("Course").child(post.getCourseCode()).child("pid").setValue(pid);
-        mDatabase.child("Gender").child(post.getGender()).child("pid").setValue(pid);
+        setEditingEnabled(false);
+        Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
+
+        // [START single_value_read]
+        final String userId = "testid";
+        writeNewPost(userId, location, course, timeFrom, timeTo, date, gender);
+        setEditingEnabled(true);
+        finish();
     }
+
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
+    }
+
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
         newFragment.show(getFragmentManager(), "timePicker");
     }
+
     @Override
     public void onTimePicked(String time){
         if (isFromField) {
@@ -181,10 +220,28 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
             mTimeFieldTo.setText(time);
         }
     }
-    // Demo login. Will be replaced once the auth module is ready.
-    public FirebaseUser login(){
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.signInWithEmailAndPassword("lichiheng1998@gmail.com", "1234567890");
-        return auth.getCurrentUser();
+
+    @Override
+    public void onDatePicked(String time) {
+        mDateField.setText(time);
     }
+
+    // [START write_fan_out]
+    private void writeNewPost(String userId, String location, String courseCode,
+                              String timeFrom, String timeTo, String date, String genderPreference) {
+        // Create new post at /user-posts/$userid/$postid and at
+        // /posts/$postid simultaneously
+        String key = mDatabase.child("Post").push().getKey();
+        Post post = new Post(userId, location, courseCode, timeFrom, timeTo, date, genderPreference);
+        Map<String, Object> postValues = post.toMap();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/Post/" + key, postValues);
+        childUpdates.put("/Location/" + location + "/test/" + key, postValues);
+        childUpdates.put("/Gender/" + genderPreference + "/test/" + key, postValues);
+        childUpdates.put("/Course/" + courseCode + "/test/" + key, postValues);
+
+        mDatabase.updateChildren(childUpdates);
+    }
+    // [END write_fan_out]
+
 }
