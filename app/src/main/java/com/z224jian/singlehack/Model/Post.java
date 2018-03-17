@@ -15,6 +15,7 @@ public class Post {
     public String timeTo = "";
     public String genderPreference = "";
 
+
     public Post() {
         // Default constructor required for calls for DataSnapshot.getValue(User.class)
     }
@@ -28,5 +29,6 @@ public class Post {
         this.timeTo = timeTo;
         this.genderPreference = genderPreference;
     }
+
 
 }
