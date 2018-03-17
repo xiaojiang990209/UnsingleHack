@@ -108,6 +108,7 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(MainActivity.this, NewPostActivity.class));
             }
         });
+<<<<<<< HEAD
     }
 
     public void displayUserInfo(JSONObject object)
@@ -140,6 +141,8 @@ public class MainActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
+=======
+>>>>>>> cb1f094c82f0152dedcd29d5f574672a4d913de7
     }
 }
 

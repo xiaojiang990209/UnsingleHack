@@ -37,18 +37,17 @@
         android:textSize="24dp"
         android:text="Course Code"/>
 
-    <EditText
+    <Spinner
         android:id="@+id/course_field"
-        android:layout_width="480dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
-        android:hint="Title"
         android:layout_toEndOf="@id/course_title"
         android:layout_toRightOf="@id/course_title"
-        android:layout_alignBottom="@id/course_title"
-        android:maxLines="1" />
+        android:layout_alignBottom="@id/course_title">
+    </Spinner>
 
     <TextView
         android:id="@+id/time_title"
