@@ -1,5 +1,6 @@
 package com.z224jian.singlehack;
 
+import android.app.DialogFragment;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -30,7 +31,9 @@ import java.util.Map;
  * Created by z224jian on 16/03/18.
  */
 
-public class NewPostActivity extends BaseActivity {
+public class NewPostActivity extends BaseActivity
+        implements TimePickerFragment.TimePickedListener,
+                   DatePickerFragment.DatePickedListener{
     private static final String TAG = "NewPostActivity";
     private static final String REQUIRED = "Required";
 
@@ -41,11 +44,13 @@ public class NewPostActivity extends BaseActivity {
     private Spinner mLocationField;
     private EditText mTimeFieldFrom;
     private EditText mTimeFieldTo;
+    private EditText mDateField;
     private Spinner mGenderField;
     //... Add course code field here.
     // For now, use an EditText
     private Spinner mCourseField;
     private FloatingActionButton mSubmitButton;
+    private boolean isFromField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +67,11 @@ public class NewPostActivity extends BaseActivity {
         mLocationField = findViewById(R.id.location_field);
         mTimeFieldFrom = findViewById(R.id.time_field_from);
         mTimeFieldTo = findViewById(R.id.time_field_to);
+        mDateField = findViewById(R.id.date_field);
         mCourseField = findViewById(R.id.course_field);
         mGenderField = findViewById(R.id.gender_field);
         mSubmitButton = findViewById(R.id.fab_submit_post);
+        isFromField = false;
 
         // Initialize spinner options
         ArrayAdapter<CharSequence> locations_adapter = ArrayAdapter.createFromResource(this,
@@ -89,6 +96,27 @@ public class NewPostActivity extends BaseActivity {
                 submitPost();
             }
         });
+
+        // Onclick waking up the time picker dialog
+        mTimeFieldFrom.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                isFromField = true;
+                showTimePickerDialog(view);
+            }
+        });
+        mTimeFieldTo.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                showTimePickerDialog(view);
+            }
+        });
+        mDateField.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDatePickerDialog(view);
+            }
+        });
     }
 
     private void setEditingEnabled(boolean enabled) {
@@ -109,6 +137,7 @@ public class NewPostActivity extends BaseActivity {
                 "" : mLocationField.getSelectedItem().toString();
         final String timeFrom = mTimeFieldFrom.getText().toString();
         final String timeTo = mTimeFieldTo.getText().toString();
+        final String date = mDateField.getText().toString();
         final String gender = mGenderField.getSelectedItem() == null ?
                 "" : mGenderField.getSelectedItem().toString();
         final String course = mCourseField.getSelectedItem() == null ?
@@ -122,6 +151,10 @@ public class NewPostActivity extends BaseActivity {
         // Time to is required
         if (TextUtils.isEmpty(timeTo)) {
             mTimeFieldTo.setError(REQUIRED);
+            return;
+        }
+        if (TextUtils.isEmpty(date)) {
+            mDateField.setError(REQUIRED);
             return;
         }
         // User didnt select location
@@ -143,66 +176,53 @@ public class NewPostActivity extends BaseActivity {
             return;
         }
 
-
         // Handle posting process...
         setEditingEnabled(false);
         Toast.makeText(this, "Posting...", Toast.LENGTH_SHORT).show();
 
         // [START single_value_read]
         final String userId = "testid";
-        writeNewPost(userId, location, course, timeFrom, timeTo, gender);
+        writeNewPost(userId, location, course, timeFrom, timeTo, date, gender);
         setEditingEnabled(true);
         finish();
-
-//        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(
-//                new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                        // Get user value
-//                        User user = dataSnapshot.getValue(User.class);
-//
-//                        // [START_EXCLUDE]
-//                        if (user == null) {
-//                            // User is null, error out
-//                            Log.e(TAG, "User " + userId + " is unexpectedly null");
-//                            Toast.makeText(NewPostActivity.this,
-//                                    "Error: could not fetch user.",
-//                                    Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            // Write new post
-//                            writeNewPost(userId, user.username, title, body);
-//                        }
-//
-//                        // Finish this Activity, back to the stream
-//                        setEditingEnabled(true);
-//                        finish();
-//                        // [END_EXCLUDE]
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(DatabaseError databaseError) {
-//                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
-//                        // [START_EXCLUDE]
-//                        setEditingEnabled(true);
-//                        // [END_EXCLUDE]
-//                    }
-//                });
-        // [END single_value_read]
     }
 
-    
+    public void showDatePickerDialog(View v) {
+        DialogFragment newFragment = new DatePickerFragment();
+        newFragment.show(getFragmentManager(), "datePicker");
+    }
+
+    public void showTimePickerDialog(View v) {
+        DialogFragment newFragment = new TimePickerFragment();
+        newFragment.show(getFragmentManager(), "timePicker");
+    }
+
+    @Override
+    public void onTimePicked(String time){
+        if (isFromField) {
+            mTimeFieldFrom.setText(time);
+            isFromField = false;
+        } else {
+            mTimeFieldTo.setText(time);
+        }
+    }
+
+    @Override
+    public void onDatePicked(String time) {
+        mDateField.setText(time);
+    }
 
     // [START write_fan_out]
     private void writeNewPost(String userId, String location, String courseCode,
-                              String timeFrom, String timeTo, String genderPreference) {
+                              String timeFrom, String timeTo, String date, String genderPreference) {
         // Create new post at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously
         String key = mDatabase.child("Post").push().getKey();
-        Post post = new Post(userId, location, courseCode, timeFrom, timeTo, genderPreference);
+        Post post = new Post(userId, location, courseCode, timeFrom, timeTo, date, genderPreference);
         Map<String, Object> postValues = post.toMap();
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/Post/" + key, postValues);
-        childUpdates.put("/Location/" + location + "/test" + "/" + key, postValues);
+        childUpdates.put("/Location/" + location + "/test/" + key, postValues);
         childUpdates.put("/Gender/" + genderPreference + "/test/" + key, postValues);
         childUpdates.put("/Course/" + courseCode + "/test/" + key, postValues);
 

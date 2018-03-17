@@ -18,6 +18,7 @@ public class Post {
     public String courseCode = "";
     public String timeFrom = "";
     public String timeTo = "";
+    public String date = "";
     public String genderPreference = "";
 
     public Post() {
@@ -25,12 +26,13 @@ public class Post {
     }
 
     public Post(String userId, String location, String courseCode,
-                String timeFrom, String timeTo, String genderPreference) {
+                String timeFrom, String timeTo, String date, String genderPreference) {
         this.userId = userId;
         this.location = location;
         this.courseCode = courseCode;
         this.timeFrom = timeFrom;
         this.timeTo = timeTo;
+        this.date = date;
         this.genderPreference = genderPreference;
     }
 
@@ -44,6 +46,7 @@ public class Post {
         result.put("Uid", userId);
         result.put("end", timeTo);
         result.put("start", timeFrom);
+        result.put("date", date);
 
         return result;
     }
