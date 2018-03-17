@@ -24,6 +24,15 @@ import com.z224jian.singlehack.Model.Post;
 
 import java.lang.reflect.Array;
 import java.nio.charset.Charset;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.z224jian.singlehack.models.Post;
+
+import java.lang.reflect.Array;
+import java.nio.charset.Charset;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +50,9 @@ public class NewPostActivity extends BaseActivity
     private DatabaseReference mDatabase;
     // [END declare_database_ref]
 
+    // Current user
+    private FirebaseUser currUser;
+
     private Spinner mLocationField;
     private EditText mTimeFieldFrom;
     private EditText mTimeFieldTo;
@@ -50,8 +62,8 @@ public class NewPostActivity extends BaseActivity
     // For now, use an EditText
     private Spinner mCourseField;
     private FloatingActionButton mSubmitButton;
+    // Indicate which time field is open
     private boolean isFromField;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +75,9 @@ public class NewPostActivity extends BaseActivity
         // [START initialize_database_ref]
         mDatabase = FirebaseDatabase.getInstance().getReference();
         // [END initialize_database_ref]
+
+        // Login by current user.
+        currUser = login();
 
         mLocationField = findViewById(R.id.location_field);
         mTimeFieldFrom = findViewById(R.id.time_field_from);
@@ -96,7 +111,6 @@ public class NewPostActivity extends BaseActivity
                 submitPost();
             }
         });
-
         // Onclick waking up the time picker dialog
         mTimeFieldFrom.setOnClickListener(new View.OnClickListener(){
             @Override
