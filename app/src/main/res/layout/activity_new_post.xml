@@ -12,7 +12,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
-        android:textSize="24dp"
+        android:textSize="22dp"
+        android:textStyle="bold"
         android:text="Location"/>
 
     <Spinner
@@ -34,21 +35,21 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
         android:layout_below="@id/location_title"
-        android:textSize="24dp"
-        android:text="Course Code"/>
+        android:textSize="22dp"
+        android:text="Course Code"
+        android:textStyle="bold"/>
 
-    <EditText
+    <Spinner
         android:id="@+id/course_field"
-        android:layout_width="480dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
-        android:hint="Title"
         android:layout_toEndOf="@id/course_title"
         android:layout_toRightOf="@id/course_title"
-        android:layout_alignBottom="@id/course_title"
-        android:maxLines="1" />
+        android:layout_alignBottom="@id/course_title">
+    </Spinner>
 
     <TextView
         android:id="@+id/time_title"
@@ -58,7 +59,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
         android:layout_below="@id/course_title"
-        android:textSize="24dp"
+        android:textSize="22dp"
         android:text="Time"/>
 
     <EditText
@@ -83,7 +84,7 @@
         android:layout_toRightOf="@id/time_field_from"
         android:layout_toEndOf="@id/time_field_from"
         android:layout_alignBottom="@id/time_field_from"
-        android:textSize="24dp"
+        android:textSize="22dp"
         android:text="To"/>
 
     <EditText
@@ -106,7 +107,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
         android:layout_below="@id/time_title"
-        android:textSize="24dp"
+        android:textSize="22dp"
         android:text="Gender"/>
 
     <Spinner

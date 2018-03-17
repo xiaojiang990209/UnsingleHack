@@ -1,5 +1,6 @@
 package com.z224jian.singlehack;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.TextUtils;
@@ -11,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -35,13 +37,16 @@ public class NewPostActivity extends BaseActivity {
     private Spinner mGenderField;
     //... Add course code field here.
     // For now, use an EditText
-    private EditText mCourseField;
+    private Spinner mCourseField;
     private FloatingActionButton mSubmitButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
+
+        // Initialize FirebaseApp
+        FirebaseApp.initializeApp(this);
 
         // [START initialize_database_ref]
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -50,15 +55,27 @@ public class NewPostActivity extends BaseActivity {
         mLocationField = findViewById(R.id.location_field);
         mTimeFieldFrom = findViewById(R.id.time_field_from);
         mTimeFieldTo = findViewById(R.id.time_field_to);
+        mCourseField = findViewById(R.id.course_field);
         mGenderField = findViewById(R.id.gender_field);
         mSubmitButton = findViewById(R.id.fab_submit_post);
 
         // Initialize spinner options
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> locations_adapter = ArrayAdapter.createFromResource(this,
                 R.array.available_locations, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mLocationField.setAdapter(adapter);
+        locations_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mLocationField.setAdapter(locations_adapter);
 
+        ArrayAdapter<CharSequence> courses_adapter = ArrayAdapter.createFromResource(this, 
+                R.array.available_courses, android.R.layout.simple_spinner_item);
+        courses_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mCourseField.setAdapter(courses_adapter);
+
+        ArrayAdapter<CharSequence> genders_adapter = ArrayAdapter.createFromResource(this,
+                R.array.available_genders, android.R.layout.simple_spinner_item);
+        genders_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mGenderField.setAdapter(genders_adapter);
+
+        // Setup onclick events
         mSubmitButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -68,10 +85,14 @@ public class NewPostActivity extends BaseActivity {
     }
 
     private void submitPost() {
-        final String location = mLocationField.getSelectedItem().toString();
+        final String location = mLocationField.getSelectedItem() == null ?
+                "" : mLocationField.getSelectedItem().toString();
         final String timeFrom = mTimeFieldFrom.getText().toString();
         final String timeTo = mTimeFieldTo.getText().toString();
-        final String gender = mGenderField.getSelectedItem().toString();
+        final String gender = mGenderField.getSelectedItem() == null ?
+                "" : mGenderField.getSelectedItem().toString();
+        final String course = mCourseField.getSelectedItem() == null ?
+                "" : mCourseField.getSelectedItem().toString();
 
         // Time from is required
         if (TextUtils.isEmpty(timeFrom)) {
@@ -84,17 +105,24 @@ public class NewPostActivity extends BaseActivity {
             return;
         }
         // User didnt select location
-        if (location.equals("")) {
+        if (mLocationField.getSelectedItem() == null) {
             Toast.makeText(this, "Location is required", Toast.LENGTH_SHORT)
                     .show();
             return;
         }
         // User didnt select gender
-        if (gender.equals("")) {
+        if (mGenderField.getSelectedItem() == null) {
             Toast.makeText(this, "Gender is required", Toast.LENGTH_SHORT)
                     .show();
             return;
         }
+        // User didnt select course_code 
+        if (mCourseField.getSelectedItem() == null) {
+            Toast.makeText(this, "Course code is required", Toast.LENGTH_SHORT)
+                    .show();
+            return;
+        }
+
 
         // Handle posting process...
 
