@@ -14,9 +14,9 @@ import com.google.firebase.database.Query;
 import java.util.*;
 
 public class Matcher {
-    Post postInfo;
+    private Post postInfo;
     private DatabaseReference mDatabase;
-    SortedMap<Post, Integer> matchedPost;
+    private SortedMap<Post, Integer> matchedPost;
     private Query query;
 
     Matcher (Post new_post, DatabaseReference mDatabase) {
