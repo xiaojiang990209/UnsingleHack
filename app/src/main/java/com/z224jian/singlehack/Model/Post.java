@@ -1,4 +1,4 @@
-package com.z224jian.singlehack.models;
+package com.z224jian.singlehack.Model;
 
 
 import java.util.HashMap;

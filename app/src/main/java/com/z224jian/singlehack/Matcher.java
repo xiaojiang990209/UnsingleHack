@@ -1,5 +1,7 @@
 package com.z224jian.singlehack;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,21 +23,21 @@ public class Matcher {
     Matcher (Post new_post, DatabaseReference mDatabase) {
         this.mDatabase = mDatabase;
         matchedPost = new TreeMap<>();
+        this.postInfo = new_post;
     }
 
-    String doMatch(boolean withLocation, boolean withCourseCode, boolean withTime
-            , boolean withGender)
+    String doMatch(boolean withLocation, boolean withCourseCode, boolean withGender)
     {
         ArrayList<Query> queryList = new ArrayList<>();
         // Operate every checked filter
         if (withLocation) {
-            queryList.add(mDatabase.child("Location").equalTo(postInfo.getLocation()));
+            queryList.add(mDatabase.orderByChild("Location").equalTo(postInfo.getLocation()));
         }
         if (withCourseCode) {
-            queryList.add(mDatabase.child("Course").equalTo(postInfo.getCourseCode()));
+            queryList.add(mDatabase.orderByChild("Course").equalTo(postInfo.getCourseCode()));
         }
         if (withGender) {
-            queryList.add(mDatabase.child("Gender").equalTo(postInfo.getGender()));
+            queryList.add(mDatabase.orderByChild("Gender").equalTo(postInfo.getGender()));
         }
         // Add ValueEventListener to query
         for (Query query: queryList){
@@ -43,9 +45,10 @@ public class Matcher {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        String pid = snapshot.child("pid").getValue(String.class);
+                        String pid = snapshot.getKey();
+                        Log.i("key", pid);
                         if (matchedPost.containsKey(pid)) {
-                            matchedPost.put (pid, matchedPost.get(pid) + 1);
+                            matchedPost.put(pid,matchedPost.get(pid) + 1);
                         } else {
                             matchedPost.put (pid, 0);
                         }
@@ -59,7 +62,7 @@ public class Matcher {
             });
         }
         if (matchedPost.isEmpty()) {
-            return null;
+            return "None";
         } else {
             return matchedPost.lastKey();
         }

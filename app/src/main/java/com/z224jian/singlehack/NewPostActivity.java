@@ -1,16 +1,14 @@
 package com.z224jian.singlehack;
 
 import android.app.DialogFragment;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.FirebaseApp;
@@ -18,12 +16,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.z224jian.singlehack.models.Post;
+import com.z224jian.singlehack.Model.Post;
 
-import java.lang.reflect.Array;
-import java.nio.charset.Charset;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -161,12 +156,17 @@ public class NewPostActivity extends BaseActivity implements TimePickerFragment.
         String fromInString = month + "-" + day + "-" + year + " " + timeFrom;
         String toInString = month + "-" + day + "-" + year + " " + timeFrom;
         Post post = new Post(currUser.getUid(), location, course, gender, fromInString, toInString);
+        // Searching for matched post
+        Matcher matcher = new Matcher(post, mDatabase);
+        String matched = matcher.doMatch(true, true, true);
+        Log.i("matched", matched);
         // Upload to post
         Map<String, String> postMap = post.toMap();
         mDatabase.child("Post").child(pid).setValue(postMap);
-        mDatabase.child("Location").child(post.getLocation()).child("pid").setValue(pid);
-        mDatabase.child("Course").child(post.getCourseCode()).child("pid").setValue(pid);
-        mDatabase.child("Gender").child(post.getGender()).child("pid").setValue(pid);
+        mDatabase.child("Location").child(post.getLocation()).child(pid).setValue(currUser.getUid());
+        mDatabase.child("Course").child(post.getCourseCode()).child(pid).setValue(currUser.getUid());
+        mDatabase.child("Gender").child(post.getGender()).child(pid).setValue(currUser.getUid());
+        mDatabase.child("User").child(currUser.getUid()).child(pid).setValue("pid");
     }
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerFragment();
