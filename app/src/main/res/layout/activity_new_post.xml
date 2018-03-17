@@ -72,9 +72,6 @@
         android:layout_toEndOf="@id/time_title"
         android:layout_toRightOf="@id/time_title"
         android:layout_alignBottom="@id/time_title"
-        android:inputType="none"
-        android:focusable="false"
-        android:textIsSelectable="true"
         android:maxLines="1" />
 
     <TextView
@@ -100,9 +97,6 @@
         android:layout_toEndOf="@id/time_title_to"
         android:layout_toRightOf="@id/time_title_to"
         android:layout_alignBottom="@id/time_title_to"
-        android:inputType="none"
-        android:focusable="false"
-        android:textIsSelectable="true"
         android:maxLines="1" />
 
     <TextView
@@ -137,29 +131,5 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         android:src="@drawable/ic_navigation_check_24"/>
-
-    <TextView
-        android:id="@+id/date_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@id/time_title"
-        android:textSize="22dp"
-        android:textStyle="bold"
-        android:text="Date"/>
-
-    <EditText
-        android:id="@+id/date_field"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="20dp"
-        android:layout_toRightOf="@id/date_title"
-        android:layout_toEndOf="@id/date_title"
-        android:layout_alignBottom="@id/date_title"/>
-
 
 </RelativeLayout>
