@@ -16,7 +16,11 @@ import java.util.*;
 public class Matcher {
     private Post postInfo;
     private DatabaseReference mDatabase;
+<<<<<<< HEAD
     private SortedMap<Post, Integer> matchedPost;
+=======
+    private SortedMap<String, Integer> matchedPost;
+>>>>>>> 259589fdbcbb501e0131d19c2e8de9dee40a6ecd
     private Query query;
 
     Matcher (Post new_post, DatabaseReference mDatabase) {
@@ -29,11 +33,19 @@ public class Matcher {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+<<<<<<< HEAD
                     Post item = snapshot.getValue(Post.class);
                     if (matchedPost.containsKey(item)) {
                         matchedPost.put (item, matchedPost.get(item) + 1);
                     } else {
                         matchedPost.put (item, 0);
+=======
+                    String pid = snapshot.child("pid").getValue(String.class);
+                    if (matchedPost.containsKey(pid)) {
+                        matchedPost.put (pid, matchedPost.get(pid) + 1);
+                    } else {
+                        matchedPost.put (pid, 0);
+>>>>>>> 259589fdbcbb501e0131d19c2e8de9dee40a6ecd
                     }
                 }
             }
@@ -46,11 +58,16 @@ public class Matcher {
     }
 
 
+<<<<<<< HEAD
     Post doMatch(boolean withLocation, boolean withCourseCode, boolean withTime
+=======
+    String doMatch(boolean withLocation, boolean withCourseCode, boolean withTime
+>>>>>>> 259589fdbcbb501e0131d19c2e8de9dee40a6ecd
             , boolean withGender)
     {
         // Operate every checked filter
         if (withLocation) {
+<<<<<<< HEAD
             query = mDatabase.child("Location").equalTo(postInfo.location);
         }
         if (withCourseCode) {
@@ -58,6 +75,15 @@ public class Matcher {
         }
         if (withGender) {
             query = mDatabase.child("Location").equalTo(postInfo.genderPreference);
+=======
+            query = mDatabase.child("Location").equalTo(postInfo.getLocation());
+        }
+        if (withCourseCode) {
+            query = mDatabase.child("Course").equalTo(postInfo.getCourseCode());
+        }
+        if (withGender) {
+            query = mDatabase.child("Gender").equalTo(postInfo.getGender());
+>>>>>>> 259589fdbcbb501e0131d19c2e8de9dee40a6ecd
         }
 
         if (matchedPost.isEmpty()) {
@@ -67,4 +93,8 @@ public class Matcher {
         }
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 259589fdbcbb501e0131d19c2e8de9dee40a6ecd

@@ -72,6 +72,9 @@
         android:layout_toEndOf="@id/time_title"
         android:layout_toRightOf="@id/time_title"
         android:layout_alignBottom="@id/time_title"
+        android:inputType="none"
+        android:focusable="false"
+        android:textIsSelectable="true"
         android:maxLines="1" />
 
     <TextView
@@ -97,6 +100,9 @@
         android:layout_toEndOf="@id/time_title_to"
         android:layout_toRightOf="@id/time_title_to"
         android:layout_alignBottom="@id/time_title_to"
+        android:inputType="none"
+        android:focusable="false"
+        android:textIsSelectable="true"
         android:maxLines="1" />
 
     <TextView
