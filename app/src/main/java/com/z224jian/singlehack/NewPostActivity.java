@@ -84,6 +84,11 @@ public class NewPostActivity extends BaseActivity {
         });
     }
 
+    private void setEditingEnabled(boolean enabled) {
+
+    }
+
+
     private void submitPost() {
         final String location = mLocationField.getSelectedItem() == null ?
                 "" : mLocationField.getSelectedItem().toString();
