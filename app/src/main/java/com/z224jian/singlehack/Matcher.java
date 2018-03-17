@@ -17,49 +17,47 @@ public class Matcher {
     private Post postInfo;
     private DatabaseReference mDatabase;
     private SortedMap<String, Integer> matchedPost;
-    private Query query;
 
     Matcher (Post new_post, DatabaseReference mDatabase) {
-        this.postInfo = new_post;
         this.mDatabase = mDatabase;
         matchedPost = new TreeMap<>();
-
-        // Add ValueEventListener to query
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String pid = snapshot.child("pid").getValue(String.class);
-                    if (matchedPost.containsKey(pid)) {
-                        matchedPost.put (pid, matchedPost.get(pid) + 1);
-                    } else {
-                        matchedPost.put (pid, 0);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // No implementation for now
-            }
-        });
     }
-
 
     String doMatch(boolean withLocation, boolean withCourseCode, boolean withTime
             , boolean withGender)
     {
+        ArrayList<Query> queryList = new ArrayList<>();
         // Operate every checked filter
         if (withLocation) {
-            query = mDatabase.child("Location").equalTo(postInfo.getLocation());
+            queryList.add(mDatabase.child("Location").equalTo(postInfo.getLocation()));
         }
         if (withCourseCode) {
-            query = mDatabase.child("Course").equalTo(postInfo.getCourseCode());
+            queryList.add(mDatabase.child("Course").equalTo(postInfo.getCourseCode()));
         }
         if (withGender) {
-            query = mDatabase.child("Gender").equalTo(postInfo.getGender());
+            queryList.add(mDatabase.child("Gender").equalTo(postInfo.getGender()));
         }
+        // Add ValueEventListener to query
+        for (Query query: queryList){
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String pid = snapshot.child("pid").getValue(String.class);
+                        if (matchedPost.containsKey(pid)) {
+                            matchedPost.put (pid, matchedPost.get(pid) + 1);
+                        } else {
+                            matchedPost.put (pid, 0);
+                        }
+                    }
+                }
 
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // No implementation for now
+                }
+            });
+        }
         if (matchedPost.isEmpty()) {
             return null;
         } else {
