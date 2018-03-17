@@ -5,7 +5,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.z224jian.singlehack.Model.Post;
+import com.z224jian.singlehack.models.Post;
 import com.google.firebase.database.Query;
 
 /**
@@ -33,13 +33,13 @@ public class Matcher {
         queryList = new ArrayList<>();
         // Operate every checked filter
         if (withLocation) {
-            queryList.add(mDatabase.child("Location").child(postInfo.getLocation()));
+            queryList.add(mDatabase.child("Location").child(postInfo.location));
         }
         if (withCourseCode) {
-            queryList.add(mDatabase.child("Course").child(postInfo.getCourseCode()));
+            queryList.add(mDatabase.child("Course").child(postInfo.courseCode));
         }
         if (withGender) {
-            queryList.add(mDatabase.child("Gender").child(postInfo.getGender()));
+            queryList.add(mDatabase.child("Gender").child(postInfo.genderPreference));
         }
         // Add ValueEventListener to query
         for (Query query: queryList){

@@ -20,7 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.z224jian.singlehack.Model.Post;
+import com.z224jian.singlehack.models.Post;
 
 import java.lang.reflect.Array;
 import java.nio.charset.Charset;
@@ -51,7 +51,7 @@ public class NewPostActivity extends BaseActivity
     // [END declare_database_ref]
 
     // Current user
-    private FirebaseUser currUser;
+    //private FirebaseUser currUser;
 
     private Spinner mLocationField;
     private EditText mTimeFieldFrom;
@@ -77,7 +77,7 @@ public class NewPostActivity extends BaseActivity
         // [END initialize_database_ref]
 
         // Login by current user.
-        currUser = login();
+        //currUser = login();
 
         mLocationField = findViewById(R.id.location_field);
         mTimeFieldFrom = findViewById(R.id.time_field_from);

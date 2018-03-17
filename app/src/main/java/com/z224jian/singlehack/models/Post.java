@@ -1,4 +1,4 @@
-package com.z224jian.singlehack.Model;
+package com.z224jian.singlehack.models;
 
 import com.google.firebase.database.Exclude;
 
