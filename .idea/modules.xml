@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
-      <module fileurl="file://C:\Users\yawen\UnsingleHack\SingleHack.iml" filepath="C:\Users\yawen\UnsingleHack\SingleHack.iml" />
-=======
-      <module fileurl="file://C:\Users\lichi\AndroidStudioProjects\UnsingleHack\SingleHack.iml" filepath="C:\Users\lichi\AndroidStudioProjects\UnsingleHack\SingleHack.iml" />
->>>>>>> 259589fdbcbb501e0131d19c2e8de9dee40a6ecd
       <module fileurl="file://$PROJECT_DIR$/UnsingleHack.iml" filepath="$PROJECT_DIR$/UnsingleHack.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\lichi\AndroidStudioProjects\UnsingleHack\app\app.iml" filepath="C:\Users\lichi\AndroidStudioProjects\UnsingleHack\app\app.iml" />
     </modules>
   </component>
 </project>
