@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SingleHack</string>
+    <string name="app_name">Matchable</string>
     <string-array name="available_locations">
         <item>DC</item>
         <item>MC</item>
@@ -7,4 +7,7 @@
         <item>DP</item>
         <!-- other options add here .. -->
     </string-array>
+    <string name="facebook_app_id">1232776790185935</string>
+    <string name="fb_login_protocol_scheme">fb1232776790185935</string>
+    <string name="main_signIn">Matchable</string>
 </resources>
