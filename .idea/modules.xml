@@ -3,6 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SingleHack.iml" filepath="$PROJECT_DIR$/SingleHack.iml" />
+<<<<<<< HEAD
+=======
+      <module fileurl="file://$PROJECT_DIR$/UnsingleHack.iml" filepath="$PROJECT_DIR$/UnsingleHack.iml" />
+      <module fileurl="file://$PROJECT_DIR$/UnsingleHack.iml" filepath="$PROJECT_DIR$/UnsingleHack.iml" />
+>>>>>>> 709534ac2e04c97e79eafbd436649495812ef0c4
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
