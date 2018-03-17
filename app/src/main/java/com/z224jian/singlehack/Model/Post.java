@@ -1,5 +1,10 @@
 package com.z224jian.singlehack.Model;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by z224jian on 17/03/18.
  */
@@ -28,5 +33,20 @@ public class Post {
         this.timeTo = timeTo;
         this.genderPreference = genderPreference;
     }
+
+    // [START post_to_map]
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("Course", courseCode);
+        result.put("Gender", genderPreference);
+        result.put("Location", location);
+        result.put("Uid", userId);
+        result.put("end", timeTo);
+        result.put("start", timeFrom);
+
+        return result;
+    }
+    // [END post_to_map]
 
 }
