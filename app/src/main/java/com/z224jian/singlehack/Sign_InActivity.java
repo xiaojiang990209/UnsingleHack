@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,24 +58,54 @@ public class Sign_InActivity extends BaseActivity {
         profileTracker = new ProfileTracker() {
             @Override
             protected void onCurrentProfileChanged(Profile oldProfile, Profile newProfile) {
-                nextActivity(newProfile);
+
             }
         };
         accessTokenTracker.startTracking();
         profileTracker.startTracking();
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions("user_friends", "public_profile");
+        loginButton.setReadPermissions("user_friends", "public_profile", "user_birthday");
 
         FacebookCallback<LoginResult> callback = new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Profile profile = Profile.getCurrentProfile();
-                nextActivity(profile);
+                final Profile profile = Profile.getCurrentProfile();
+
                 Toast.makeText(getApplicationContext(), "Loggin in...", Toast.LENGTH_SHORT).show();
 
                 info.setText("Login succeed.");
                 String userid = loginResult.getAccessToken().getUserId();
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                // Application code
+                                try {
+                                    Log.d("tttttt", object.getString("id"));
+
+                                    String fnm = object.getString("first_name");
+                                    String lnm = object.getString("last_name");
+                                    String gender = object.getString("gender");
+                                    String id = object.getString("id");
+                                    String birthday = object.getString("birthday");
+                                    JSONObject jsonObject = object.getJSONObject("location");
+                                    String location = jsonObject.getString("name");
+
+                                    nextActivity(profile, fnm, lnm, gender, id, birthday, location);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id, first_name, last_name, gender, birthday, location");
+                request.setParameters(parameters);
+                request.executeAsync();
 //                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
 //                    @Override
 //                    public void onCompleted(JSONObject object, GraphResponse response) {
@@ -104,7 +136,6 @@ public class Sign_InActivity extends BaseActivity {
     protected void onResume(){
         super.onResume();
         Profile profile = Profile.getCurrentProfile();
-        nextActivity(profile);
     }
     @Override
     protected void onPause() {
@@ -117,12 +148,17 @@ public class Sign_InActivity extends BaseActivity {
         profileTracker.stopTracking();
     }
 
-    private void nextActivity(Profile profile) {
-        if(profile != null) {
+    private void nextActivity(Profile profile, String fnm, String lnm, String gender, String id, String birthday, String location) {
+        if(fnm != null && lnm != null && gender != null && id != null && birthday != null && location != null) {
             Intent main = new Intent(Sign_InActivity.this, ProfileActivity.class);
-            main.putExtra("first_name", profile.getFirstName());
-            main.putExtra("last_name", profile.getLastName());
+            main.putExtra("first_name", fnm);
+            main.putExtra("last_name", lnm);
+            main.putExtra("gender", gender);
+            main.putExtra("birthday", birthday);
+            main.putExtra("location", location);
+            main.putExtra("id", id);
             main.putExtra("imageUrl", profile.getProfilePictureUri(200,200). toString());
+
             startActivity(main);
         }
     }

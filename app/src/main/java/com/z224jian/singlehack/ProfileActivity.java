@@ -35,10 +35,11 @@ public class ProfileActivity extends BaseActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+        savedInstanceState.getBundle("parameter");
         FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.profile);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         shareDialog = new ShareDialog(this);
 
@@ -54,10 +55,25 @@ public class ProfileActivity extends BaseActivity{
         Bundle inBundle = getIntent().getExtras();
         String first_name = inBundle.get("first_name").toString();
         String last_ame = inBundle.get("last_ame").toString();
+        String birthday = inBundle.get("birthday").toString();
+        String gender = inBundle.get("gender").toString();
+        String location = inBundle.get("location").toString();
+        String id = inBundle.get("id").toString();
         String imageUrl = inBundle.get("imageUrl").toString();
 
         TextView nameView = (TextView) findViewById(R.id.first_nameAndLast_name);
+        TextView genderView = (TextView) findViewById(R.id.gender);
+        TextView birthdayView = (TextView) findViewById(R.id.birthday);
+        TextView idView = (TextView) findViewById(R.id.id);
+        TextView locationView = (TextView) findViewById(R.id.location);
+
+
         nameView.setText("" + first_name + " " + last_ame);
+        genderView.setText(""+ gender);
+        birthdayView.setText(""+birthday);
+        idView.setText(""+id);
+        locationView.setText(""+ location);
+
         Button logout = (Button) findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener(){
             @Override
