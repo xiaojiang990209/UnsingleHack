@@ -43,7 +43,6 @@ public class Sign_InActivity extends BaseActivity {
         setContentView(R.layout.sign_in);
 
 
-        info = (TextView)findViewById(R.id.info);
         callbackManager = CallbackManager.Factory.create();
 
         accessTokenTracker = new AccessTokenTracker() {
@@ -72,7 +71,6 @@ public class Sign_InActivity extends BaseActivity {
                 nextActivity(profile);
                 Toast.makeText(getApplicationContext(), "Loggin in...", Toast.LENGTH_SHORT).show();
 
-                info.setText("Login succeed.");
                 String userid = loginResult.getAccessToken().getUserId();
 //                GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
 //                    @Override
@@ -88,13 +86,12 @@ public class Sign_InActivity extends BaseActivity {
 
             @Override
             public void onCancel() {
-                info.setText("Login attempt canceled.");
 
             }
 
             @Override
             public void onError(FacebookException error) {
-                info.setText("Login attempt failed.");
+
             }
         };
         loginButton.registerCallback(callbackManager, callback);

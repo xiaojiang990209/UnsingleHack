@@ -37,8 +37,7 @@ public class ProfileActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.profile);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
 
         shareDialog = new ShareDialog(this);
 
@@ -53,11 +52,11 @@ public class ProfileActivity extends BaseActivity{
 
         Bundle inBundle = getIntent().getExtras();
         String first_name = inBundle.get("first_name").toString();
-        String last_ame = inBundle.get("last_ame").toString();
+        String last_name = inBundle.get("last_name").toString();
         String imageUrl = inBundle.get("imageUrl").toString();
 
         TextView nameView = (TextView) findViewById(R.id.first_nameAndLast_name);
-        nameView.setText("" + first_name + " " + last_ame);
+        nameView.setText("" + first_name + " " + last_name);
         Button logout = (Button) findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener(){
             @Override

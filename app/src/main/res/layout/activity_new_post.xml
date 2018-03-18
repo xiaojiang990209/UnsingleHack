@@ -106,7 +106,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="20dp"
-        android:layout_below="@id/time_title"
+        android:layout_below="@id/date_title"
         android:textSize="22dp"
         android:text="Gender"/>
 
@@ -154,6 +154,18 @@
         android:layout_toRightOf="@id/date_title"
         android:layout_toEndOf="@id/date_title"
         android:layout_alignBottom="@id/date_title"/>
+
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/gender_title"
+        android:text="Result"
+        />
 
 
 </RelativeLayout>

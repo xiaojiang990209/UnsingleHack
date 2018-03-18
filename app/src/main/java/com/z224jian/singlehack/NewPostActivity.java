@@ -62,6 +62,7 @@ public class NewPostActivity extends BaseActivity
     // For now, use an EditText
     private Spinner mCourseField;
     private FloatingActionButton mSubmitButton;
+    private TextView mResult;
     // Indicate which time field is open
     private boolean isFromField;
     @Override
@@ -86,6 +87,7 @@ public class NewPostActivity extends BaseActivity
         mCourseField = findViewById(R.id.course_field);
         mGenderField = findViewById(R.id.gender_field);
         mSubmitButton = findViewById(R.id.fab_submit_post);
+        mResult = findViewById(R.id.result);
         isFromField = false;
 
         // Initialize spinner options
@@ -198,7 +200,7 @@ public class NewPostActivity extends BaseActivity
         final String userId = "testid";
         writeNewPost(userId, location, course, timeFrom, timeTo, date, gender);
         setEditingEnabled(true);
-        finish();
+        //finish();
     }
 
     public void showDatePickerDialog(View v) {
@@ -239,7 +241,9 @@ public class NewPostActivity extends BaseActivity
         childUpdates.put("/Location/" + location + "/test/" + key, postValues);
         childUpdates.put("/Gender/" + genderPreference + "/test/" + key, postValues);
         childUpdates.put("/Course/" + courseCode + "/test/" + key, postValues);
-
+        Matcher matcher = new Matcher(post, key, mDatabase, mResult);
+        matcher.createQuerys(true, false, false);
+        matcher.doMatch();
         mDatabase.updateChildren(childUpdates);
     }
     // [END write_fan_out]
