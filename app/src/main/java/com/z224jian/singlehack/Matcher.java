@@ -67,16 +67,17 @@ public class Matcher {
     }
     String doMatch()
     {
-        if (matchedPost.isEmpty()) {
-            return "None";
-        } else {
+        String result = "None";
+        if (!matchedPost.isEmpty()) {
             String matchedPid = matchedPost.lastKey();
             int count = matchedPost.get(matchedPost.lastKey()) + 1;
             if(count == queryList.size()){
-                return matchedPid;
+                result = matchedPid;
             }
-            return "None";
         }
+        // Clear the TreeMap after the matched post has been selected.
+        matchedPost.clear();
+        return result;
     }
 
 }
